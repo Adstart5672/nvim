@@ -1,170 +1,147 @@
 local fn = vim.fn
 
--- Automatically install packer
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
-	print("Installing packer close and reopen Neovim...")
-	vim.cmd([[packadd packer.nvim]])
+-- Automatically install Lazy
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
--- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
 
--- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-	return
-end
-
--- Have packer use a popup window
-packer.init({
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "rounded" })
-		end,
-	},
-})
 
 -- Install your plugins here
-return packer.startup(function(use)
-	-- My plugins here
-	use("wbthomason/packer.nvim") -- Have packer manage itself
-	use("nvim-lua/popup.nvim") -- An implementation of the Popup API from vim in Neovim
-	use("nvim-lua/plenary.nvim") -- Useful lua functions used ny lots of plugins
-	use("andweeb/presence.nvim") -- Discord presence
-	use("akinsho/toggleterm.nvim") -- Toggle Term
-	use("windwp/nvim-autopairs") -- autoPairs
-	use({
-		"lewis6991/gitsigns.nvim",
-		requires = {
-			"nvim-lua/plenary.nvim",
-		},
-	}) -- gitSign
-	use("lukas-reineke/indent-blankline.nvim") -- indentline
-	use({
-		"goolord/alpha-nvim",
-		requires = { "kyazdani42/nvim-web-devicons" },
-	}) -- alpha
-	use("kyazdani42/nvim-tree.lua") -- nvim Tree
-	use("folke/which-key.nvim")
-	use("norcalli/nvim-colorizer.lua")
-	use({
-		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
-	})
+vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
-	-- multi cursor
-	use("mg979/vim-visual-multi")
+require("lazy").setup({
+        -- My plugins here
+        "folke/lazy.nvim", -- Have lazy manage itself
+        "nvim-lua/popup.nvim",  -- An implementation of the Popup API from vim in Neovim
+        "nvim-lua/plenary.nvim", -- Useful lua functions used ny lots of plugins
+        "andweeb/presence.nvim", -- Discord presence
+        "akinsho/toggleterm.nvim", -- Toggle Term
+        "windwp/nvim-autopairs", -- autoPairs
+        {
+                "lewis6991/gitsigns.nvim",
+                dependencies = {
+                        "nvim-lua/plenary.nvim",
+                },
+        }, -- gitSign
+        "lukas-reineke/indent-blankline.nvim", -- indentline
+        {
+                "goolord/alpha-nvim",
+                dependencies = { "kyazdani42/nvim-web-devicons" },
+        }, -- alpha
+        "kyazdani42/nvim-tree.lua", -- nvim Tree
+        "folke/which-key.nvim",
+        "norcalli/nvim-colorizer.lua",
+        {
+                "folke/trouble.nvim",
+                dependencies = "kyazdani42/nvim-web-devicons",
+        },
 
-	-- Color Scheme
-	use("folke/tokyonight.nvim")
-	use("shaunsingh/nord.nvim")
-	use("navarasu/onedark.nvim")
-	use("EdenEast/nightfox.nvim")
-	use("rmehri01/onenord.nvim")
-	use("morhetz/gruvbox")
-	use("glepnir/zephyr-nvim")
-	use({ "catppuccin/nvim" })
-	use({ "Everblush/everblush.nvim", as = "everblush" })
-	-- cmp plugins
-	use("hrsh7th/nvim-cmp") -- The completion plugin
-	use("hrsh7th/cmp-buffer") -- buffer completions
-	use("hrsh7th/cmp-path") -- path completions
-	use("hrsh7th/cmp-cmdline") -- cmdline completions
-	use("saadparwaiz1/cmp_luasnip") -- snippet completions
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-nvim-lua")
+        -- multi cursor
+        "mg979/vim-visual-multi",
 
-	-- snippets
-	use("L3MON4D3/LuaSnip") --snippet engine
-	use("rafamadriz/friendly-snippets") -- a bunch of snippets to use
+        -- Color Scheme
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
 
-	-- LSP
+    },
+        "shaunsingh/nord.nvim",
+        "navarasu/onedark.nvim",
+        "EdenEast/nightfox.nvim",
+        "rmehri01/onenord.nvim",
+        "morhetz/gruvbox",
+        "glepnir/zephyr-nvim",
+        { "catppuccin/nvim" },
+        { "Everblush/everblush.nvim", name = "everblush" },
+        -- cmp plugins
+        "hrsh7th/nvim-cmp", -- The completion plugin
+        "hrsh7th/cmp-buffer", -- buffer completions
+        "hrsh7th/cmp-path", -- path completions
+        "hrsh7th/cmp-cmdline", -- cmdline completions
+        "saadparwaiz1/cmp_luasnip", -- snippet completions
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-nvim-lua",
 
-	use("neovim/nvim-lspconfig") -- enable LSP
-	use("williamboman/mason-lspconfig.nvim")
-	use({ "williamboman/mason.nvim" })
-	use("jose-elias-alvarez/null-ls.nvim")
-	use({
-		"ray-x/lsp_signature.nvim",
-	})
-	use({
-		"glepnir/lspsaga.nvim",
-		branch = "main",
-		config = function()
-			local saga = require("lspsaga")
+        -- snippets
+        "L3MON4D3/LuaSnip", --snippet engine
+        "rafamadriz/friendly-snippets", -- a bunch of snippets to use
 
-			saga.init_lsp_saga({
-				-- your configuration
-			})
-		end,
-	})
-	use({
-		"j-hui/fidget.nvim",
-		config = function()
-			require("fidget").setup({})
-		end,
-	})
+        -- LSP
 
-	-- Telescope
-	use("nvim-telescope/telescope.nvim")
-	use("nvim-telescope/telescope-media-files.nvim")
+        "neovim/nvim-lspconfig", -- enable LSP
+        "williamboman/mason-lspconfig.nvim",
+        { "williamboman/mason.nvim" },
+        "jose-elias-alvarez/null-ls.nvim",
+        {
+                "ray-x/lsp_signature.nvim",
+        },
+        {
+                "glepnir/lspsaga.nvim",
+                branch = "main",
+                config = function()
+      require'lspsaga'.setup({})
+                end,
+        },
+        {
+                "j-hui/fidget.nvim",
+                config = function()
+                        require"fidget".setup({})
+                end,
+        },
 
-	-- Treesitter
-	use({
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-	})
-	use("p00f/nvim-ts-rainbow")
+        -- Telescope
+        "nvim-telescope/telescope.nvim",
+        "nvim-telescope/telescope-media-files.nvim",
 
-	use("windwp/nvim-ts-autotag")
+        -- Treesitter
+        {
+                "nvim-treesitter/nvim-treesitter",
+                build = ":TSUpdate",
+        },
+        "p00f/nvim-ts-rainbow",
 
-	-- lualine
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
+        "windwp/nvim-ts-autotag",
 
-	-- Comment
-	use("numToStr/Comment.nvim")
-	use("JoosepAlviste/nvim-ts-context-commentstring")
+        -- lualine
+        {
+                "nvim-lualine/lualine.nvim",
+                dependencies = { "kyazdani42/nvim-web-devicons", lazy = true },
+        },
 
-	-- bufferline
-	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
-	use("moll/vim-bbye")
+        -- Comment
+        "numToStr/Comment.nvim",
+        "JoosepAlviste/nvim-ts-context-commentstring",
 
-	use({
-		"kylechui/nvim-surround",
-		config = function()
-			require("nvim-surround").setup({
-				-- Configuration here, or leave empty to use defaults
-			})
-		end,
-	})
-	use({
-		"petertriho/nvim-scrollbar",
-		config = function()
-			require("scrollbar").setup()
-		end,
-	})
+        -- bufferline
+        { "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
+        "moll/vim-bbye",
 
-	use("ahmedkhalf/project.nvim")
-	-- Automatically set up your configuration after cloning packer.nvim
-	-- Put this at the end after all plugins
-	if PACKER_BOOTSTRAP then
-		require("packer").sync()
-	end
-end)
+        {
+                "kylechui/nvim-surround",
+                config = function()
+                        require"nvim-surround".setup({
+                                -- Configuration here, or leave empty to  defaults
+      })
+                end,
+        },
+        {
+                "petertriho/nvim-scrollbar",
+                config = function()
+                        require"scrollbar".setup()
+                end,
+        },
+
+        "ahmedkhalf/project.nvim",
+})
+

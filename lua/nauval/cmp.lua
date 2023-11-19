@@ -17,31 +17,31 @@ end
 
 --   פּ ﯟ   some other good icons
 local kind_icons = {
-	Class = " ",
+	Class = " ",
 	Color = " ",
-	Constant = "ﲀ ",
+	Constant = " ",
 	Constructor = " ",
-	Enum = "練",
+	Enum = "",
 	EnumMember = " ",
 	Event = " ",
 	Field = " ",
-	File = "",
-	Folder = " ",
-	Function = " ",
-	Interface = "ﰮ ",
-	Keyword = " ",
+	File = "󰈔",
+	Folder = "󰉋 ",
+	Function = "󰊕 ",
+	Interface = " ",
+	Keyword = " ",
 	Method = " ",
-	Module = " ",
-	Operator = "",
+	Module = "󰕳 ",
+	Operator = "",
 	Property = " ",
-	Reference = " ",
+	Reference = " ",
 	Snippet = " ",
 	Struct = " ",
-	Text = " ",
-	TypeParameter = " ",
-	Unit = "塞",
-	Value = " ",
-	Variable = " ",
+	Text = "󰦨 ",
+	TypeParameter = " ",
+	Unit = "󰇉",
+	Value = "󰫧 ",
+	Variable = " ",
 }
 -- find more here: https://www.nerdfonts.com/cheat-sheet
 
@@ -130,3 +130,4 @@ cmp.setup({
 		native_menu = false,
 	},
 })
+
