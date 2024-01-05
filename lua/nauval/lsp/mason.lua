@@ -19,7 +19,7 @@ mason.setup({
 })
 mason_lspconfig.setup({
 	automatic_installation = true,
-	ensure_installed = { "sumneko_lua", "jsonls", "tsserver", "tailwindcss" },
+	ensure_installed = { "jsonls", "tsserver", "tailwindcss" },
 })
 
 local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
@@ -42,10 +42,6 @@ mason_lspconfig.setup_handlers({
 		if server_name == "jsonls" then
 			local jsonls_opts = require("nauval.lsp.settings.jsonls")
 			opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
-		end
-		if server_name == "sumneko_lua" then
-			local sumneko_opts = require("nauval.lsp.settings.sumneko_lua")
-			opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
 		end
 		if server_name == "tailwindcss" then
 			local tailwindcss_opts = {

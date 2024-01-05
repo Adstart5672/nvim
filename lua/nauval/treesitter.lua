@@ -12,18 +12,11 @@ configs.setup({
 		additional_vim_regex_highlighting = true,
 	},
 	indent = { enable = true, disable = { "yaml" } },
-	rainbow = {
-		enable = true,
-		extended_mode = false,
-		-- disable = { "tsx" },
-		-- colors = {}, -- table of hex strings
-		-- termcolors = {} -- table of colour name strings
-	},
-	context_commentstring = {
-		enable = true,
-		enable_autocmd = false,
-	},
 	autotag = {
 		enable = true,
 	},
 })
+require('ts_context_commentstring').setup {
+      enable_autocmd = false,
+      
+}

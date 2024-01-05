@@ -33,7 +33,7 @@ require("lazy").setup({
                         "nvim-lua/plenary.nvim",
                 },
         }, -- gitSign
-        "lukas-reineke/indent-blankline.nvim", -- indentline
+        { "lukas-reineke/indent-blankline.nvim", main="ibl",  opts={}  }, -- indentline
         {
                 "goolord/alpha-nvim",
                 dependencies = { "kyazdani42/nvim-web-devicons" },
@@ -72,9 +72,18 @@ require("lazy").setup({
         "saadparwaiz1/cmp_luasnip", -- snippet completions
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-nvim-lua",
+        "onsails/lspkind.nvim", -- Vscode like pictogram
 
         -- snippets
-        "L3MON4D3/LuaSnip", --snippet engine
+        { 
+           "L3MON4D3/LuaSnip", 
+
+           version = "v2.*",
+
+           build = "make install_jsregexp"
+
+        }, 
+
         "rafamadriz/friendly-snippets", -- a bunch of snippets to use
 
         -- LSP
@@ -82,17 +91,16 @@ require("lazy").setup({
         "neovim/nvim-lspconfig", -- enable LSP
         "williamboman/mason-lspconfig.nvim",
         { "williamboman/mason.nvim" },
-        "jose-elias-alvarez/null-ls.nvim",
         {
+              'stevearc/conform.nvim',
+                opts = {},
+                
+        },
+        {
+
                 "ray-x/lsp_signature.nvim",
         },
-        {
-                "glepnir/lspsaga.nvim",
-                branch = "main",
-                config = function()
-      require'lspsaga'.setup({})
-                end,
-        },
+        "kkharji/lspsaga.nvim",
         {
                 "j-hui/fidget.nvim",
                 config = function()
@@ -109,7 +117,7 @@ require("lazy").setup({
                 "nvim-treesitter/nvim-treesitter",
                 build = ":TSUpdate",
         },
-        "p00f/nvim-ts-rainbow",
+        "HiPhish/rainbow-delimiters.nvim",
 
         "windwp/nvim-ts-autotag",
 

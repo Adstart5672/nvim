@@ -5,4 +5,4 @@ end
 require("nauval.lsp.lsp-signature")
 require("nauval.lsp.mason")
 require("nauval.lsp.handlers").setup()
-require("nauval.lsp.null-ls")
+require("nauval.lsp.conform")
