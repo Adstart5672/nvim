@@ -34,14 +34,14 @@ require("lazy").setup({
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }, -- indentline
 	{
 		"goolord/alpha-nvim",
-		dependencies = { "kyazdani42/nvim-web-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	}, -- alpha
-	"kyazdani42/nvim-tree.lua", -- nvim Tree
+	"nvim-tree/nvim-tree.lua", -- nvim Tree
 	"folke/which-key.nvim",
 	"norcalli/nvim-colorizer.lua",
 	{
 		"folke/trouble.nvim",
-		dependencies = "kyazdani42/nvim-web-devicons",
+		dependencies = "nvim-tree/nvim-web-devicons",
 	},
 
 	-- multi cursor
@@ -158,7 +158,7 @@ require("lazy").setup({
 	-- lualine
 	{
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "kyazdani42/nvim-web-devicons", lazy = true },
+		dependencies = { "nvim-tree/nvim-web-devicons", lazy = true },
 	},
 
 	-- Comment
@@ -166,7 +166,7 @@ require("lazy").setup({
 	"JoosepAlviste/nvim-ts-context-commentstring",
 
 	-- bufferline
-	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
+	{ "akinsho/bufferline.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
 	"moll/vim-bbye",
 
 	{
@@ -195,4 +195,5 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 		},
 	},
+	{ "CRAG666/code_runner.nvim", config = true },
 })
