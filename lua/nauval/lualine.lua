@@ -56,7 +56,10 @@ local sections = {
 		},
 	},
 	lualine_x = { "fileformat" },
-	lualine_y = { "filetype", "encoding" },
+	lualine_y = {
+		"filetype",
+		"encoding",
+	},
 	lualine_z = {
 		{ "location", separator = { right = "" }, left_padding = 2 },
 	},

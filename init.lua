@@ -23,4 +23,4 @@ require("nauval.alpha")
 require("nauval.project")
 require("nauval.colorizer")
 require("nauval.whichkey")
-require'nvim-tree'.setup {}
+require("nvim-tree").setup({})
