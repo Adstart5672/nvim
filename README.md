@@ -1,18 +1,18 @@
 # nvim
 
-my nvim config file. stolen from https://github.com/KevinPalowa/nvim
+my nvim config file. stolen from https://github.com/nauvalazhar/nvim
 
 ## Setup
 - Font: [JetBrainsMono NF](https://www.nerdfonts.com/font-downloads)
-- Terminal: [Alacritty](https://github.com/alacritty/alacritty)
+- Terminal: [Termux](https://github.com/termux/termux-app)
 - Shell: [ZSH](https://ohmyz.sh/)
-- Config: https://gist.github.com/nauvalazhar/cc93db74e11f1cd3d400aba6aeaf7108
+
 
 
 ## Sneak Peek
 
-<img width="1680" alt="image" src="https://user-images.githubusercontent.com/14899175/201462335-5c7a2140-9891-4bf7-adc2-e851ca2cd6da.png">
+<img width="1680" alt="image" src="https://github.com/Adstart5672/nvim/assets/106436964/92f14ee0-82cb-429b-a157-459fca9ee6db">
 
 ## Neofetch
 
-<img width="664" alt="image" src="https://user-images.githubusercontent.com/14899175/201640239-38def860-9eaf-4c7c-a597-5ceb3a71fc8e.png">
+<img width="664" alt="image" src="https://github.com/Adstart5672/nvim/assets/106436964/62ee4bdf-f7a2-431d-b64b-a06cf8dc7a9a">
