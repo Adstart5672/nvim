@@ -15,6 +15,9 @@ configs.setup({
 	autotag = {
 		enable = true,
 	},
+  tree_setter = {
+    enable = true,
+  },
 })
 require('ts_context_commentstring').setup {
       enable_autocmd = false,
