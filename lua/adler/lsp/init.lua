@@ -1,9 +1,9 @@
 local status_ok, _ = pcall(require, "lspconfig")
 if not status_ok then
-	return
+  return
 end
 require("lspconfig").clangd.setup({
-	cmd = { "clangd", "--background-index" },
+  cmd = { "clangd", "--background-index" },
 })
 require("lspconfig").tsserver.setup({
   cmd = { "typescript-language-server", "--stidio" },
