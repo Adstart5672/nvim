@@ -1,17 +1,18 @@
 -- stylua: ignore
+local navic = require("nvim-navic")
 local colors = {
-  blue   = '#80a0ff',
-  cyan   = '#79dac8',
-  black  = '#1a1b26',
-  white  = '#ffffff',
-  red    = '#ff5189',
-  violet = '#d183e8',
-  grey   = '#24283b',
-  insert = '#00FFAB',
-  visual = '#FFCA03',
-  replace = '#FF008E',
-  normal = '#4649FF',
-  light = '#888da4'
+	blue = "#80a0ff",
+	cyan = "#79dac8",
+	black = "#1a1b26",
+	white = "#ffffff",
+	red = "#ff5189",
+	violet = "#d183e8",
+	grey = "#24283b",
+	insert = "#00FFAB",
+	visual = "#FFCA03",
+	replace = "#FF008E",
+	normal = "#4649FF",
+	light = "#888da4",
 }
 
 local bubbles_theme = {
@@ -70,13 +71,22 @@ require("lualine").setup({
 		theme = bubbles_theme,
 		component_separators = { left = "->", right = "<-" },
 		section_separators = { left = "", right = "" },
-		disabled_filetypes = {
-			"NvimTree",
-			"Trouble",
-		},
+		globalstatus = true,
 	},
 	sections = sections,
 	inactive_sections = sections,
 	tabline = {},
 	extensions = {},
+	winbar = {
+		lualine_c = {
+			{
+				function()
+					return navic.get_location()
+				end,
+				cond = function()
+					return navic.is_available()
+				end,
+			},
+		},
+	},
 })

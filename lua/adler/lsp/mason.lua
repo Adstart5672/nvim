@@ -19,7 +19,7 @@ mason.setup({
 })
 mason_lspconfig.setup({
 	automatic_installation = true,
-	ensure_installed = { "jsonls", "tsserver", "tailwindcss" },
+	ensure_installed = { "jsonls", "ts_ls", "tailwindcss" },
 })
 
 local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")

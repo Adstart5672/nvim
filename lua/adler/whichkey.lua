@@ -26,7 +26,7 @@ local setup = {
 	-- add operators that will trigger motion and text object completion
 	-- to enable all native operators, set the preset / operators plugin above
 	-- operators = { gc = "Comments" },
-	key_labels = {
+	replace = {
 		-- override the label used to display some keys. It doesn't effect WK in any other way.
 		-- For example:
 		-- ["<space>"] = "SPC",
@@ -38,13 +38,14 @@ local setup = {
 		separator = "➜", -- symbol used between a key and it's label
 		group = "+", -- symbol prepended to a group
 	},
-	popup_mappings = {
+	keys = {
 		scroll_down = "<c-d>", -- binding to scroll down inside the popup
 		scroll_up = "<c-u>", -- binding to scroll up inside the popup
 	},
-	window = {
+	win = {
+		no_overlap = true,
 		border = "rounded", -- none, single, double, shadow
-		position = "bottom", -- bottom, top
+		title_pos = "bottom", -- bottom, top
 		margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
 		padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
 		winblend = 0,
@@ -55,12 +56,16 @@ local setup = {
 		spacing = 3, -- spacing between columns
 		align = "left", -- align columns left, center or right
 	},
-	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
+	filter = function(mapping)
+		-- example to exclude mappings without a description
+		-- return mapping.desc and mapping.desc ~= ""
+		return true
+	end, -- enable this to hide mappings for which you didn't specify a label
 	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
 	show_help = true, -- show help message on the command line when the popup is visible
-	triggers = "auto", -- automatically setup triggers
+	triggers = { { "<auto>", mode = "nxso" } }, -- automatically setup triggers
 	-- triggers = {"<leader>"} -- or specify a list manually
-	triggers_blacklist = {
+	blacklist = {
 		-- list of mode / prefixes that should never be hooked by WhichKey
 		-- this is mostly relevant for key maps that start with a native binding
 		-- most people should not need to change this
@@ -78,109 +83,133 @@ local opts = {
 	nowait = true, -- use `nowait` when creating keymaps
 }
 
-local mappings = {
-	["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-	["b"] = {
+local wk = require("which-key")
+wk.add({
+	{ "<leader>a", "<cmd>Alpha<cr>", desc = "Alpha", nowait = true, remap = false },
+	{
+		"<leader>P",
+		"<cmd>lua require('telescope').extensions.projects.projects()<cr>",
+		desc = "Projects",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "Explorer", nowait = true, remap = false },
+	{ "<leader>w", "<cmd>w!<CR>", desc = "Save", nowait = true, remap = false },
+	{ "<leader>q", "<cmd>q!<CR>", desc = "Quit", nowait = true, remap = false },
+	{ "<leader>c", "<cmd>Bdelete!<CR>", desc = "Close Buffer", nowait = true, remap = false },
+	{ "<leader>h", "<cmd>nohlsearch<CR>", desc = "No Highlight", nowait = true, remap = false },
+	{
+		"<leader>b",
 		"<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-		"Buffers",
+		desc = "Buffers",
+		nowait = true,
+		remap = false,
 	},
-	["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-	["w"] = { "<cmd>w!<CR>", "Save" },
-	["q"] = { "<cmd>q!<CR>", "Quit" },
-	["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
-	["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
-	["f"] = {
-		"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-		"Find files",
+	{ "<leader>F", "<cmd>Telescope live_grep<cr>", desc = "Find Text", nowait = true, remap = false },
+	{
+		"<leader>P",
+		"<cmd>lua require('telescope').extensions.projects.projects()<cr>",
+		desc = "Projects",
+		nowait = true,
+		remap = false,
 	},
-	["F"] = { "<cmd>Telescope live_grep<cr>", "Find Text" },
-	["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
+	{ "<leader>p", group = "Lazy", nowait = true, remap = false },
+	{ "<leader>pS", "<cmd>Lazy check<cr>", desc = "Check", nowait = true, remap = false },
+	{ "<leader>pc", "<cmd>Lazy profile<cr>", desc = "Profile", nowait = true, remap = false },
+	{ "<leader>pi", "<cmd>Lazy install<cr>", desc = "Install", nowait = true, remap = false },
+	{ "<leader>ps", "<cmd>Lazy sync<cr>", desc = "Sync", nowait = true, remap = false },
+	{ "<leader>pu", "<cmd>Lazy update<cr>", desc = "Update", nowait = true, remap = false },
+	{ "<leader>g", group = "Git", nowait = true, remap = false },
+	{ "<leader>g", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", desc = "Lazygit", nowait = true, remap = false },
+	{ "<leader>j", "<cmd>lua require 'gitsigns'.next_hunk()<cr>", desc = "Next Hunk", nowait = true, remap = false },
+	{ "<leader>k", "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", desc = "Prev Hunk", nowait = true, remap = false },
+	{ "<leader>l", "<cmd>lua require 'gitsigns'.blame_line()<cr>", desc = "Blame", nowait = true, remap = false },
+	{
+		"<leader>p",
+		"<cmd>lua require 'gitsigns'.preview_hunk()<cr>",
+		desc = "Preview Hunk",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>r", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk", nowait = true, remap = false },
+	{
+		"<leader>R",
+		"<cmd>lua require 'gitsigns'.reset_buffer()<cr>",
+		desc = "Reset Buffer",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>s", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk", nowait = true, remap = false },
+	{
+		"<leader>u",
+		"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
+		desc = "Undo Stage Hunk",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>o", "<cmd>Telescope git_status<cr>", desc = "Open changed file", nowait = true, remap = false },
+	{ "<leader>b", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch", nowait = true, remap = false },
+	{ "<leader>c", "<cmd>Telescope git_commits<cr>", desc = "Checkout commit", nowait = true, remap = false },
+	{
+		"<leader>d",
+		"<cmd>Gitsigns diffthis HEAD<cr>",
+		desc = "Diff",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>l", group = "LSP", nowait = true, remap = false },
+	{ "<leader>lI", "<cmd>Mason<cr>", desc = "Installer Info", nowait = true, remap = false },
+	{
+		"<leader>lS",
+		"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+		desc = "Workspace Symbols",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>la", "<cmd>Lspsaga code_action<CR>", desc = "Code Action", nowait = true, remap = false },
+	{
+		"<leader>ld",
+		"<cmd>Telescope lsp_document_diagnostics<cr>",
+		desc = "Document Diagnostics",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>lf", "<cmd>lua vim.lsp.buf.format {async=false}<cr>", desc = "Format", nowait = true, remap = false },
+	{ "<leader>li", "<cmd>LspInfo<cr>", desc = "Info", nowait = true, remap = false },
+	{ "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<CR>", desc = "Next Diagnostic", nowait = true, remap = false },
+	{ "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic", nowait = true, remap = false },
+	{ "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action", nowait = true, remap = false },
+	{ "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix", nowait = true, remap = false },
+	{ "<leader>lr", "<cmd>Lspsaga rename<CR>", desc = "Rename", nowait = true, remap = false },
+	{
+		"<leader>ls",
+		"<cmd>Telescope lsp_document_symbols<cr>",
+		desc = "Document Symbols",
+		nowait = true,
+		remap = false,
+	},
+	{ "<leader>lt", "<cmd>TroubleToggle<cr>", desc = "Trouble", nowait = true, remap = false },
+	{ "<leader>lw", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics", nowait = true, remap = false },
+	{ "<leader>s", group = "Search", nowait = true, remap = false },
+	{ "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands", nowait = true, remap = false },
+	{ "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages", nowait = true, remap = false },
+	{ "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers", nowait = true, remap = false },
+	{ "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch", nowait = true, remap = false },
+	{ "<leader>sc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme", nowait = true, remap = false },
+	{ "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Find Help", nowait = true, remap = false },
+	{ "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps", nowait = true, remap = false },
+	{ "<leader>sr", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File", nowait = true, remap = false },
 
-	p = {
-		name = "Packer",
-		c = { "<cmd>PackerCompile<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
-		s = { "<cmd>PackerSync<cr>", "Sync" },
-		S = { "<cmd>PackerStatus<cr>", "Status" },
-		u = { "<cmd>PackerUpdate<cr>", "Update" },
+	{ "<leader>t", group = "Terminal", nowait = true, remap = false },
+	{ "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Float", nowait = true, remap = false },
+	{
+		"<leader>th",
+		"<cmd>ToggleTerm size=10 direction=horizontal<cr>",
+		desc = "Horizontal",
+		nowait = true,
+		remap = false,
 	},
-
-	g = {
-		name = "Git",
-		g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
-		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-		l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-		p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-		r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-		R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-		s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-		u = {
-			"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-			"Undo Stage Hunk",
-		},
-		o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
-		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-		c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-		d = {
-			"<cmd>Gitsigns diffthis HEAD<cr>",
-			"Diff",
-		},
-	},
-
-	l = {
-		name = "LSP",
-		a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-		d = {
-			"<cmd>Telescope lsp_document_diagnostics<cr>",
-			"Document Diagnostics",
-		},
-		w = {
-			"<cmd>Telescope diagnostics<cr>",
-			"Workspace Diagnostics",
-		},
-		f = { "<cmd>lua vim.lsp.buf.format {async=false}<cr>", "Format" },
-		i = { "<cmd>LspInfo<cr>", "Info" },
-		I = { "<cmd>Mason<cr>", "Installer Info" },
-		j = {
-			"<cmd>lua vim.diagnostic.goto_next()<CR>",
-			"Next Diagnostic",
-		},
-		k = {
-			"<cmd>lua vim.diagnostic.goto_prev()<cr>",
-			"Prev Diagnostic",
-		},
-		l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-		q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
-		r = { "<cmd>Lspsaga rename<CR>", "Rename" },
-		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-		S = {
-			"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-			"Workspace Symbols",
-		},
-		t = { "<cmd>TroubleToggle<cr>", "Trouble" },
-	},
-	s = {
-		name = "Search",
-		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-		R = { "<cmd>Telescope registers<cr>", "Registers" },
-		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-		C = { "<cmd>Telescope commands<cr>", "Commands" },
-	},
-
-	t = {
-		name = "Terminal",
-		n = { "<cmd>TermExec cmd='node'<cr>", "Node" },
-		t = { "<cmd>TermExec cmd='htop'<cr>", "Htop" },
-		f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
-		h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
-		v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
-	},
-}
-
-which_key.setup(setup)
-which_key.register(mappings, opts)
+	{ "<leader>tn", "<cmd>TermExec cmd='node'<cr>", desc = "Node", nowait = true, remap = false },
+	{ "<leader>tt", "<cmd>TermExec cmd='htop'<cr>", desc = "Htop", nowait = true, remap = false },
+	{ "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", desc = "Vertical", nowait = true, remap = false },
+})
