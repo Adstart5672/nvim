@@ -30,7 +30,33 @@ require("lazy").setup({
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
-	}, -- gitSign
+	},
+	{ "nvzone/volt", lazy = true },
+	{ "nvzone/menu", lazy = true },
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+		},
+	},
+	-- gitSign
+	{
+		"NeogitOrg/neogit",
+		dependencies = {
+			"nvim-lua/plenary.nvim", -- required
+			"sindrets/diffview.nvim", -- optional - Diff integration
+
+			-- Only one of these is needed.
+			"nvim-telescope/telescope.nvim", -- optional
+			"ibhagwan/fzf-lua", -- optional
+			"echasnovski/mini.pick", -- optional
+		},
+		config = true,
+	},
+
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }, -- indentline
 	{
 		"goolord/alpha-nvim",
@@ -105,7 +131,10 @@ require("lazy").setup({
 	"hrsh7th/cmp-nvim-lsp",
 	"hrsh7th/cmp-nvim-lua",
 	"onsails/lspkind.nvim", -- Vscode like pictogram
-
+	{
+		"dnlhc/glance.nvim",
+		cmd = "Glance",
+	},
 	-- snippets
 	{
 		"L3MON4D3/LuaSnip",
@@ -130,10 +159,46 @@ require("lazy").setup({
 		opts = {},
 	},
 	{
+		"ldelossa/litee.nvim",
+		event = "VeryLazy",
+		opts = {
+			notify = { enabled = false },
+			panel = {
+				orientation = "bottom",
+				panel_size = 10,
+			},
+		},
+		config = function(_, opts)
+			require("litee.lib").setup(opts)
+		end,
+	},
+
+	{
+		"ldelossa/litee-calltree.nvim",
+		dependencies = "ldelossa/litee.nvim",
+		event = "VeryLazy",
+		opts = {
+			on_open = "panel",
+			map_resize_keys = false,
+		},
+		config = function(_, opts)
+			require("litee.calltree").setup(opts)
+		end,
+	},
+	{
 
 		"ray-x/lsp_signature.nvim",
 	},
-	"kkharji/lspsaga.nvim",
+	"nvimdev/lspsaga.nvim",
+	config = function()
+		require("lspsaga").setup({
+			symbol_in_winbar = { enablw = true, delay = 350 },
+		})
+	end,
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter", -- optional
+		"nvim-tree/nvim-web-devicons", -- optional
+	},
 	{ -- This plugin
 		"Zeioth/compiler.nvim",
 		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
@@ -142,7 +207,6 @@ require("lazy").setup({
 	},
 	{ -- The task runner we use
 		"stevearc/overseer.nvim",
-		commit = "68a2d344cea4a2e11acfb5690dc8ecd1a1ec0ce0",
 		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
 		opts = {
 			task_list = {
@@ -221,11 +285,33 @@ require("lazy").setup({
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
 		},
+
 		config = function()
 			require("refactoring").setup()
 		end,
 	},
+	"nvim-treesitter/nvim-treesitter-refactor",
+	{
+		"dense-analysis/ale",
+		config = function()
+			-- Configuration goes here.
+			local g = vim.g
 
+			g.ale_ruby_rubocop_auto_correct_all = 1
+			g.ale_use_neovim_diagnostics_api = 1
+
+			g.ale_linters = {
+				ruby = { "rubocop", "ruby" },
+				lua = { "lua_language_server" },
+				cpp = { "cppcheck" },
+			}
+			g.ale_fixers = {
+				ruby = { "rubocop" },
+				lua = { "stylua" },
+				cpp = { "clangtidy", "clang-format" },
+			}
+		end,
+	},
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
@@ -309,6 +395,10 @@ require("lazy").setup({
 	},
 
 	"AstroNvim/astrocommunity",
+	"mfussenegger/nvim-dap",
+	"theHamsta/nvim-dap-virtual-text",
+	"jay-babu/mason-nvim-dap.nvim",
+	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 	-- install without yarn or npm
 	{
 		"iamcco/markdown-preview.nvim",
@@ -318,7 +408,6 @@ require("lazy").setup({
 			vim.fn["mkdp#util#install"]()
 		end,
 	},
-	"filNaj/tree-setter",
 	"echasnovski/mini.nvim",
 	"github/copilot.vim",
 	{
@@ -397,6 +486,18 @@ require("lazy").setup({
 				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
+		},
+		{
+			"CopilotC-Nvim/CopilotChat.nvim",
+			dependencies = {
+				{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+				{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+			},
+			build = "make tiktoken", -- Only on MacOS or Linux
+			opts = {
+				-- See Configuration section for options
+			},
+			-- See Commands section for default commands if you want to lazy load on them
 		},
 	},
 })

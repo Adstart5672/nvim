@@ -11,7 +11,7 @@ ibl.setup({
 			"help",
 			"startify",
 			"dashboard",
-			"packer",
+			"lazy",
 			"neogitstatus",
 			"NvimTree",
 			"Trouble",
@@ -55,4 +55,4 @@ ibl.setup({
 vim.wo.colorcolumn = "99999"
 
 vim.cmd([[highlight IndentBlanklineChar guifg=#292929]])
-vim.cmd([[highlight IndentBlanklineContextChar guifg=#494949]])
+vim.cmd([[highlight IndentBlanklineContextChar guifg=#fcdb03]])

@@ -86,9 +86,9 @@ keymap("n", "<leader>m", ":NvimTreeToggle<cr>", opts)
 -- keymap("v", "<C-_>", "gc", opts)
 
 -- LspSaga
-keymap("n", "gh", "<cmd>Lspsaga lsp_finder<cr>", opts)
+keymap("n", "gh", "<cmd>Lspsaga finder<cr>", opts)
 keymap("v", "<leader>ca", "<cmd><C-U>Lspsaga range_code_action<CR>", opts)
-keymap("n", "gs", "<Cmd>Lspsaga signature_help<CR>", opts)
+keymap("n", "gs", "<Cmd>Lspsaga supertypes<CR>", opts)
 keymap("n", "gr", "<cmd>Lspsaga rename<CR>", opts)
 keymap("n", "gl", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
 keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)

@@ -10,7 +10,7 @@ local on_attach = function(client, bufnr)
 end
 
 require("lspconfig").clangd.setup({
-	cmd = { "clangd", "--background-index" },
+	cmd = { "clangd", "--background-index", "--offset-encoding=utf-16", "--clang-tidy" },
 	on_attach = on_attach,
 })
 require("lspconfig").ts_ls.setup({

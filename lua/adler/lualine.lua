@@ -1,5 +1,5 @@
 -- stylua: ignore
-local navic = require("nvim-navic")
+require("lspsaga").setup({})
 local colors = {
 	blue = "#80a0ff",
 	cyan = "#79dac8",
@@ -60,6 +60,7 @@ local sections = {
 	lualine_y = {
 		"filetype",
 		"encoding",
+		"Aerial",
 	},
 	lualine_z = {
 		{ "location", separator = { right = "" }, left_padding = 2 },
@@ -78,15 +79,6 @@ require("lualine").setup({
 	tabline = {},
 	extensions = {},
 	winbar = {
-		lualine_c = {
-			{
-				function()
-					return navic.get_location()
-				end,
-				cond = function()
-					return navic.is_available()
-				end,
-			},
-		},
+		require("lspsaga.symbol.winbar").get_bar(),
 	},
 })
